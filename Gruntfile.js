@@ -14,29 +14,29 @@ module.exports = function(grunt) {
   grunt.initConfig({
     // Configuration to be run (and then tested).
     pandoc: {
-      default_options: {
+      epub: {
         configs: {
-          "publish"   : 'EPUB',
+          "publish"   : "EPUB",
+          "output"    : "output",
           "title"     : "Pandoc EPUB Title",
           "metadata"  : "include/metadata.xml",
           "stylesheet": "include/style.css"
         },
         files: {
-          "chapters": [ "chapters/header.md",
+          "chapters": [
+            "chapters/header.md",
             "chapters/content.md"
           ]
         }
       },
-      custom_options: {
+      toHtml: {
         configs: {
-          "publish"   : 'EPUB',
-          "title"     : "Pandoc EPUB Title",
-          "metadata"  : "include/metadata.xml",
-          "stylesheet": "include/style.css"
+          "publish"   : 'HTML',
+          "output"    : "output"
         },
         files: {
-          "chapters": [ "chapters/header.md",
-            "chapters/content.md"
+          "from": [
+            "input/toHTML.md"
           ]
         }
       }

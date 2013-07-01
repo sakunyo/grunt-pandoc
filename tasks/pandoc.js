@@ -54,7 +54,7 @@ _task.fn = {};
     for (key in configs) this.configs[key] = configs[key];
     this.configs.target  = target;
 
-    this.files = files;
+    this.files = files || {};
 
     return this;
   };
@@ -67,16 +67,18 @@ _task.fn = {};
      * @returns {string}
      */
     getEXEC: function (type) {
-      var exe = "";
+      var exec = [""];
 
       switch (type || this.configs["publish"]) {
         case "EPUB":
-          exe = this.publishEPUB().join(" ");
+          exec = this.publishEPUB();
           break;
+        case "HTML":
+          exec = this.publishHTML();
         default:
           break;
       }
-      return exe;
+      return exec.join(" ");
     },
     /**
      * publishEPUB
@@ -92,6 +94,17 @@ _task.fn = {};
       exec.push("--epub-metadata="   + conf.metadata);
       exec.push("--epub-stylesheet=" + conf.stylesheet);
       exec.push(this.files["chapters"].join(" "));
+
+      return exec;
+    },
+    publishHTML: function () {
+      var exec = ["pandoc"],
+          conf = this.configs;
+
+      exec.push("-f markdown");
+      exec.push("-t html");
+      exec.push("-o " + conf.target + ".html");
+      exec.push(this.files["from"][0]);
 
       return exec;
     }
