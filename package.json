@@ -1,6 +1,6 @@
 {
   "name": "grunt-pandoc",
-  "description": "The best Grunt plugin ever.",
+  "description": "grunt task pandoc wrapper",
   "version": "0.2.0",
   "homepage": "https://github.com/sakunyo/grunt-pandoc",
   "author": {
