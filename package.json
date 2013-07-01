@@ -1,0 +1,42 @@
+{
+  "name": "grunt-pandoc",
+  "description": "The best Grunt plugin ever.",
+  "version": "0.2.0",
+  "homepage": "https://github.com/sakunyo/grunt-pandoc",
+  "author": {
+    "name": "sakuya sugo",
+    "email": "sakuya.s@sakunyo.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sakunyo/grunt-pandoc"
+  },
+  "bugs": {
+    "url": "https://github.com/sakunyo/grunt-pandoc/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/sakunyo/grunt-pandoc/blob/master/LICENSE-MIT"
+    }
+  ],
+  "main": "Gruntfile.js",
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "scripts": {
+    "test": "grunt test"
+  },
+  "devDependencies": {
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-clean": "~0.4.0",
+    "grunt-contrib-nodeunit": "~0.2.0",
+    "grunt": "~0.4.1"
+  },
+  "peerDependencies": {
+    "grunt": "~0.4.1"
+  },
+  "keywords": [
+    "gruntplugin"
+  ]
+}
