@@ -27,7 +27,7 @@ grunt.initConfig({
   default_options: { // OUTPUT file name
     configs: {
       "publish"   : 'EPUB',                 // Publish File Format.
-      "title"     : "Pandoc EPUB Title",    // EPUB Title
+      "title"     : "My EPUB Title",    // EPUB Title
       "metadata"  : "include/metadata.xml", // EPUB include META data File Path.
       "stylesheet": "include/style.css"     // EPUB include StyleSheet File Path.
     },
