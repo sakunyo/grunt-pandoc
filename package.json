@@ -1,7 +1,7 @@
 {
   "name": "grunt-pandoc",
   "description": "Grunt Task Pandoc Wrapper",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "homepage": "https://github.com/sakunyo/grunt-pandoc",
   "author": {
     "name": "sakuya sugo",

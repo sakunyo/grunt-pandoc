@@ -8,141 +8,49 @@
 
 'use strict';
 
-var _task = {};
-_task.fn = {};
-
-
-(function(fn){
-  /**
-   * Console Reporter.
-   * @param obj
-   * @returns {string}
-   */
-  fn.reporter = function (obj) {
-    var key, res = [];
-
-    for (key in obj) {
-      if (typeof obj[key] === "object") {
-        res.push(key + "-> " + reporter(obj[key]));
-      } else if (typeof obj[key] === "function") {
-        res.push(key + "-> " + obj[key].toString());
-      } else {
-        res.push(key + "-> " + obj[key]);
-      }
-    }
-    return "\n" + res.join("\n");
-  }
-})(_task.fn);
-
-
-(function(root){
-  var PandocRun;
-
-  /**
-   * PandocRun
-   *
-   * @param target  {string} Grunt Multi Task Target
-   * @param configs {object}
-   * @param files   {object}
-   * @returns {*}
-   * @constructor
-   */
-  PandocRun = function(target, configs, files){
-    var key;
-
-    this.configs = {};
-    for (key in configs) this.configs[key] = configs[key];
-    this.configs.target  = target;
-
-    this.files = files || {};
-
-    return this;
-  };
-
-  PandocRun.prototype = {
-    /**
-     * getEXEC
-     * Choice Publish Format
-     * @param type
-     * @returns {string}
-     */
-    getEXEC: function (type) {
-      var exec = [""];
-
-      switch (type || this.configs["publish"]) {
-        case "EPUB":
-          exec = this.publishEPUB();
-          break;
-        case "HTML":
-          exec = this.publishHTML();
-        default:
-          break;
-      }
-      return exec.join(" ");
-    },
-    /**
-     * publishEPUB
-     * Setup Pandoc Option (Markdown files to EPUB)
-     * @returns {Array} Execute Command Strings
-     */
-    publishEPUB: function () {
-      var exec = ["pandoc"],
-          conf = this.configs;
-
-      exec.push("-S");
-      exec.push("-o " + conf.target + ".epub");
-      exec.push("--epub-metadata="   + conf.metadata);
-      exec.push("--epub-stylesheet=" + conf.stylesheet);
-      exec.push(this.files["chapters"].join(" "));
-
-      return exec;
-    },
-    publishHTML: function () {
-      var exec = ["pandoc"],
-          conf = this.configs;
-
-      exec.push("-f markdown");
-      exec.push("-t html");
-      exec.push("-o " + conf.target + ".html");
-      exec.push(this.files["from"][0]);
-
-      return exec;
-    }
-  };
-
-  root.PandocRun = PandocRun;
-})(_task);
-
-
-
 module.exports = function(grunt) {
-  var childproc = require("child_process");
+  var childproc = require("child_process"),
+      util      = require("./util"),
+      PandocRun = require("./PandocRun");
 
   grunt.registerMultiTask('pandoc', 'running pandoc process.', function() {
-    var exec = "",
+    var exec = [],
         done = this.async(),
-        pandoc;
+        pandoc,
+        i, iz,
+        success = [];
 
-    pandoc = new _task.PandocRun(
+    pandoc = new PandocRun(
       this.target,          // Output FileName
       this.data["configs"], // Configs
       this.data["files"]    // Convert File Paths.
     );
 
-    exec = pandoc.getEXEC();
-
-    // Execute Command Logging.
-    grunt.log.writeln(exec);
+    exec = pandoc.getEXEC(); // Return Execute Command String in Array.
 
     // Execute Async Child Process.
-    childproc.exec(exec, function (error, stdout, stderr) {
-      if (error || stderr) {
-        grunt.fail.fatal("Pandoc Convert Error.");
-      } else {
-        grunt.log.write(stdout);
-        done(true);
-      }
-    });
+    for (i = 0, iz = exec.length; i < iz; i++) {
+      exec[i] = util.applyFilter(exec[i], this.data["configs"]);
+
+      // Execute Command Logging.
+      grunt.log.writeln("EXEC: " + exec[i]);
+
+      childproc.exec(exec[i], function (error, stdout, stderr) {
+        if (error || stderr) {
+          grunt.log.writeln(error || stderr);
+          grunt.fail.fatal("Pandoc Convert Error.");
+        } else {
+          grunt.log.writeln(stdout);
+
+          // TODO Checking Class
+          success.push(true);
+          util.checkChildTasks(done, success.length, exec.length);
+        }
+      });
+    }
+
+    // done(true);
+
   });
 
 };
