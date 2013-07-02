@@ -90,7 +90,7 @@ grunt.initConfig({
 ```
 
 ## Release History
-* 2013-07-02	0.2.2
+* 2013-07-02	0.2.3
 	* Execute User Filter before Execute Command.
 	* Publish Format Markdown to HTML.
 * 2013-07-01	0.2.1
