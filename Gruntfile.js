@@ -8,35 +8,42 @@
 
 'use strict';
 
+function myEPUBFilter (ctx) {
+  return ctx.replace(/-o epub\.epub/, "-o output/epub.epub");
+}
+function myHTMLFilter (ctx) {
+  return ctx.replace(/-o input/, "-o output");
+}
+
 module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
     // Configuration to be run (and then tested).
     pandoc: {
-      default_options: {
+      epub: {
         configs: {
-          "publish"   : 'EPUB',
+          "publish"   : "EPUB",
           "title"     : "Pandoc EPUB Title",
           "metadata"  : "include/metadata.xml",
-          "stylesheet": "include/style.css"
+          "stylesheet": "include/style.css",
+          "filter"    : myEPUBFilter
         },
         files: {
-          "chapters": [ "chapters/header.md",
-            "chapters/content.md"
+          "chapters": [
+            "input/header.md",
+            "input/content.md"
           ]
         }
       },
-      custom_options: {
+      toHtml: {
         configs: {
-          "publish"   : 'EPUB',
-          "title"     : "Pandoc EPUB Title",
-          "metadata"  : "include/metadata.xml",
-          "stylesheet": "include/style.css"
+          "publish"   : 'HTML',
+          "filter"    : myHTMLFilter
         },
         files: {
-          "chapters": [ "chapters/header.md",
-            "chapters/content.md"
+          "from": [
+            "input/toHTML.md"
           ]
         }
       }

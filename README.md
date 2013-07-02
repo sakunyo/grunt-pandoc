@@ -1,13 +1,11 @@
 # grunt-pandoc
 
 Pandoc Publish Runner for Grunt.
+
 Markdown to Other Document Format Convert.
 
-
-## Publish format
-
-* EPUB 2.0
-* next version ( HTML )
+* Markdown to EPUB
+* Markdown to HTML
 
 
 ## Getting Started
@@ -37,15 +35,22 @@ grunt.loadNpmTasks('grunt-pandoc');
 ### Overview
 In your project's Gruntfile, add a section named `pandoc` to the data object passed into `grunt.initConfig()`.
 
+
+#### Markdown to EPUB
 ```js
+function myFilterFunc(context: string):string {
+	return context;
+}
+
 grunt.initConfig({
   pandoc: {
-    my_epub: { // OUTPUT file name
+    My_EPUB: { // OUTPUT file name
       configs: {
         "publish"   : 'EPUB',                 // Publish File Format.
-        "title"     : "My EPUB Title",    // EPUB Title
+        "title"     : "My EPUB Title",        // EPUB Title
         "metadata"  : "include/metadata.xml", // EPUB include META data File Path.
         "stylesheet": "include/style.css"     // EPUB include StyleSheet File Path.
+        "filter"    : myFilterFunc            // Calling Before Execute Command.
       },
       files: {
         "chapters": [
@@ -59,5 +64,37 @@ grunt.initConfig({
 })
 ```
 
+#### Markdown to HTML
+```js
+function myFilterFunc(context: string):string {
+	return context;
+}
+
+grunt.initConfig({
+  pandoc: {
+    toHtml: {
+      configs: {
+        "publish"   : 'HTML',       // Publish File Format.
+        "filter"    : myFilterFunc  // Calling Before Execute Command.
+      },
+      files: {
+        "from": [
+          "input/toHTML.md",
+          "input/toHTML.md"
+          ...
+        ]
+      }
+    }
+  }
+})
+```
+
 ## Release History
-_(Nothing yet)_
+* 2013-07-02	0.2.2
+	* Execute User Filter before Execute Command.
+	* Publish Format Markdown to HTML.
+* 2013-07-01	0.2.1
+	* Grunt 0.3 -> 0.4.1
+	* Publish Format Markdown to EPUB.
+
+
