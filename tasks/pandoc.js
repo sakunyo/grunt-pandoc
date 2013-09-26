@@ -34,6 +34,7 @@ module.exports = function(grunt) {
 
       // Execute Command Logging.
       grunt.log.writeln("EXEC: " + exec[i]);
+      var data = this.data;
 
       childproc.exec(exec[i], function (error, stdout, stderr) {
         if (error || stderr) {
@@ -41,6 +42,12 @@ module.exports = function(grunt) {
           grunt.fail.fatal("Pandoc Convert Error.");
         } else {
           grunt.log.writeln(stdout);
+
+          // post processing
+          if(!!data["configs"]['postHandler']) {
+            var result = grunt.file.read(data["configs"]['target']);
+            grunt.file.write(data["configs"]['target'], data["configs"]['postHandler'](data["configs"]['target'], result));
+          }
 
           // TODO Checking Class
           success.push(true);
