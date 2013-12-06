@@ -26,7 +26,7 @@ module.exports = (function () {
 
     this.configs = {};
     for (key in configs) this.configs[key] = configs[key];
-    this.configs.target  = target;
+    if(!this.configs.target) this.configs.target  = target;
 
     this.files = files || {};
 
@@ -48,6 +48,9 @@ module.exports = (function () {
         case "EPUB":
           this.publishEPUB(exec);
           break;
+        case "LATEX":
+          this.publishLatex(exec);
+          break;
         case "HTML":
           this.publishHTML(exec);
         default:
@@ -67,9 +70,26 @@ module.exports = (function () {
           conf = this.configs;
 
       _exec.push("-S");
-      _exec.push("-o " + conf.target + ".epub");
+      _exec.push("-o " + conf.target);
       _exec.push("--epub-metadata="   + conf.metadata);
       _exec.push("--epub-stylesheet=" + conf.stylesheet);
+      _exec.push("--epub-cover-image=" + conf.cover);
+
+      _exec.push(this.files["chapters"].join(" "));
+
+      exec.push(_exec.join(" "));
+
+      return exec;
+    },
+
+    publishLatex: function (exec) {
+      var _exec = ["pandoc"],
+          conf = this.configs;
+
+      _exec.push("-S");
+      _exec.push("-f" + conf.from);
+      _exec.push("-t latex");
+      _exec.push("-o " + conf.target);
       _exec.push(this.files["chapters"].join(" "));
 
       exec.push(_exec.join(" "));
