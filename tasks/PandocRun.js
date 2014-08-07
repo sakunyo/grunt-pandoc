@@ -113,7 +113,7 @@ module.exports = (function () {
         output = " -o " + from[i].replace(/\.md$/, ".html");
         input  = " "    + from[i];
 
-        exec.push(_exec.join(" ") + output + input);
+        exec.push(_exec.join(" ") + output + input + ' ' + conf.pandoc_options);
       }
 
       return exec;
