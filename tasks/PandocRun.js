@@ -53,6 +53,9 @@ module.exports = (function () {
           break;
         case "HTML":
           this.publishHTML(exec);
+          break;
+        case "RST":
+          this.publishRST(exec);
         default:
           break;
       }
@@ -117,7 +120,29 @@ module.exports = (function () {
       }
 
       return exec;
-    }
+    },
+
+    publishRST: function (exec) {
+      var _exec = ["pandoc"],
+          conf = this.configs,
+          from = this.files["from"] || [],
+          i,
+          iz,
+          output,
+          input;
+
+      _exec.push("-f markdown");
+      _exec.push("-t rst");
+
+      for (i = 0, iz = from.length; i < iz; i++) {
+        output = " -o " + from[i].replace(/\.md$/, ".rst");
+        input  = " "    + from[i];
+        exec.push(_exec.join(" ") + output + input);
+      }
+
+      return exec;
+    },
+
   };
 
   return PandocRun;

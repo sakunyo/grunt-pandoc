@@ -6,6 +6,7 @@ Markdown to Other Document Format Convert.
 
 * Markdown to EPUB
 * Markdown to HTML
+* Markdown to RST
 
 
 ## Getting Started
@@ -88,6 +89,32 @@ grunt.initConfig({
   }
 })
 ```
+
+#### Markdown to RST
+```js
+function myFilterFunc(context: string):string {
+	return context;
+}
+
+grunt.initConfig({
+  pandoc: {
+    toRst: {
+      configs: {
+        "publish"   : 'RST',       // Publish File Format.
+        "filter"    : myFilterFunc  // Calling Before Execute Command.
+      },
+      files: {
+        "from": [
+          "input/toRST.md",
+          "input/toRST.md"
+          ...
+        ]
+      }
+    }
+  }
+})
+```
+
 
 ## Release History
 * 2013-07-02	0.2.3

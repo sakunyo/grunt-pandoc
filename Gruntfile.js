@@ -14,6 +14,9 @@ function myEPUBFilter (ctx) {
 function myHTMLFilter (ctx) {
   return ctx.replace(/-o input/, "-o output");
 }
+function myRSTFilter (ctx) {
+  return ctx.replace(/-o input/, "-o output");
+}
 
 module.exports = function(grunt) {
 
@@ -44,6 +47,17 @@ module.exports = function(grunt) {
         files: {
           "from": [
             "input/toHTML.md"
+          ]
+        }
+      },
+      toRst: {
+        configs: {
+          "publish": "RST",
+          "filter": myRSTFilter
+        },
+        files: {
+          "from": [
+            "input/toRST.md"
           ]
         }
       }
